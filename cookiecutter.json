@@ -1,0 +1,22 @@
+{
+    "package_name" : "pkg-name",
+    "__pkg_lower": "{{ cookiecutter.package_name.lower() }}",
+    "__pkg_hyphen": "{{ cookiecutter.package_name.lower().replace(' ','-') }}",
+    "__pkg_under": "{{ cookiecutter.package_name.lower().replace(' ','_') }}",
+    "__dir_name" : "deb-{{ cookiecutter.__pkg_hyphen }}",
+    "maintainer_name" : "TODO: Specify the full name of the package maintainer.",
+    "maintainer_email" : "TODO: Specify maintainer email.",
+    "control_section" : ["utils", "net", "devel"],
+    "control_priority" : ["optional", "required", "important", "standard"],
+    "control_homepage" : "TODO: Change to source homepage.",
+    "control_description" : "TODO: Change this package description.",
+    "__prompts__":{
+        "package_name": "Specify the name of the software that you are packaging.",
+        "maintainer_name": "Specify the name of the package maintainer.",
+        "maintainer_email": "Specify the email address of the package maintainer.",
+        "control_section": "Specify the section of package. If you don't know, use the default.",
+        "control_priority": "Specify the priority of the package. If you don't know, use the default.",
+        "control_homepage": "Specify the source homepage of the software that you are packaging.",
+        "control_description": "Describe the software that you are packaging."
+    }
+}

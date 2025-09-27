@@ -1,0 +1,8 @@
+Section: {{ cookiecutter.control_section }}
+Priority: {{ cookiecutter.control_priority }}
+Maintainer: {{ cookiecutter.maintainer_name}} <{{ cookiecutter.maintainer_email }}>
+Homepage: {{ cookiecutter.control_homepage }}
+Package: {{ cookiecutter.package_name }}
+Version: UPSTREAM_VERSION-BUILD_VERSION+DIST
+Architecture: SUPPORTED_ARCHITECTURES
+Description: {{ cookiecutter.control_description }}

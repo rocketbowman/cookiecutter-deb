@@ -1,0 +1,67 @@
+name: Build {{ cookiecutter.package_name }} for Debian
+
+on:
+  workflow_dispatch:
+    inputs:
+      {{ cookiecutter.package_name }}_version:
+        description: The version of {{ cookiecutter.package_name }} to build.
+        type: string
+        required: true
+      build_version:
+        description: The build version.
+        type: string
+        required: true
+      architecture:
+        description: Architecture to build (amd64, arm64, armel, armhf, ppc64el, s390x, riscv64, or 'all' for all architectures)
+        type: choice
+        default: 'all'
+        options:
+          - 'all'
+          - 'amd64'
+          - 'arm64'
+          - 'armel'
+          - 'armhf'
+          - 'ppc64el'
+          - 's390x'
+          - 'riscv64'
+
+permissions:
+  contents: write
+
+jobs:
+  build-{{ cookiecutter.package_name }}:
+    name: Build
+    runs-on: ubuntu-latest    
+    steps:
+      - name: Checkout this repository
+        uses: actions/checkout@v4
+
+      - name: Build {{ cookiecutter.package_name }}
+        run: ./build.sh {% raw %}${{ inputs.{% endraw %}{{ cookiecutter.package_name }}{% raw %}_version }} ${{ inputs.build_version }} ${{ inputs.architecture }}{% endraw %}
+      
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: artifact
+          path: {{ cookiecutter.package_name }}_*.deb
+
+
+  release-{{ cookiecutter.package_name }}:
+    name: (Draft-)Release {{ cookiecutter.package_name }} for Debian
+    if: github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    needs: build-{{ cookiecutter.package_name }}
+    steps:
+      - name: Download All Artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: artifact
+
+      - name: Publish Release Draft
+        uses: softprops/action-gh-release@v2
+        with:
+          draft: true
+          files: {{ cookiecutter.package_name }}_*.deb
+          name: {% raw %}${{ inputs.{% endraw %}{{ cookiecutter.package_name }}{% raw %}_version }}+${{ inputs.build_version }}{% endraw %}
+          tag_name: {% raw %}${{ env.RELEASE_TAG }}{% endraw %}
+          fail_on_unmatched_files: true
