@@ -6,7 +6,8 @@ all the files, looking for to-do items and collects them into a todo.txt file.
 import os
 from pathlib import Path
 
-
+# post_gen_project scripts run in root of generated project
+# https://cookiecutter.readthedocs.io/en/stable/advanced/hooks.html#hook-execution
 ROOT_DIR = Path(os.getcwd())
 
 
